@@ -80,7 +80,7 @@ d5_root_feature: int | None = 1
 # accuracy?
 #
 # Answer with the dataset name, as a string, such as "xor".
-e1_deepest_dataset: str | None = None
+e1_deepest_dataset: str | None = "checkerboard"
 
 # Question E2. The `linear` dataset is split by a single straight line, yet
 # a tree needs quite a few questions to get it right. Why?
@@ -92,13 +92,13 @@ e1_deepest_dataset: str | None = None
 #   d) Gini impurity can't measure straight lines
 #
 # Answer with one letter, as a string, such as "a".
-e2_linear_reason: str | None = None
+e2_linear_reason: str | None = "b"
 
 # Question E3. How many false positives does the `moons` tree make on the
 # validation set?
 #
 # Answer with a whole number.
-e3_false_positives: int | None = None
+e3_false_positives: int | None = 8
 
 # Question E4. A smoke alarm goes off because you burned your toast. Which
 # kind of error is that?
@@ -107,7 +107,7 @@ e3_false_positives: int | None = None
 #   b) a Type II error (false negative)
 #
 # Answer with one letter, as a string, such as "a".
-e4_smoke_alarm: str | None = None
+e4_smoke_alarm: str | None = "a"
 
 # Question E5. At the largest depths, the training accuracy is perfect, but
 # the validation accuracy is lower than its best. What is happening there?
@@ -117,13 +117,13 @@ e4_smoke_alarm: str | None = None
 #   c) neither
 #
 # Answer with one letter, as a string, such as "a".
-e5_deep_tree: str | None = None
+e5_deep_tree: str | None = "b"
 
 # Question E6. At which depth is the validation accuracy of the `moons` tree
 # highest?
 #
 # Answer with a whole number.
-e6_best_depth: int | None = None
+e6_best_depth: int | None = 6
 
 # -----------------------------------------------------------------------------
 # Task F — Development (Extra)
