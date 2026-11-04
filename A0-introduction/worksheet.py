@@ -136,35 +136,35 @@ e6_best_depth: int | None = 6
 #   d) min_samples_split
 #
 # Answer with one letter, as a string, such as "a".
-f1_not_hyperparameter: str | None = None
+f1_not_hyperparameter: str | None = "c"
 
 # Question F2. With 5-fold cross-validation, how many trees are fitted to
 # score a single combination of hyperparameters?
 #
 # Answer with a whole number.
-f2_trees_per_setting: int | None = None
+f2_trees_per_setting: int | None = 5
 
 # Question F3. Thanks to this trick, how many trees does the search with 2
 # criteria, 6 depths and 5 folds actually fit?
 #
 # Answer with a whole number.
-f3_trees_fitted: int | None = None
+f3_trees_fitted: int | None = 10
 
 # Question F4. Which criterion does the best combination use?
 #
 # Answer with "gini" or "entropy".
-f4_best_criterion: str | None = None
+f4_best_criterion: str | None = "gini"
 
 # Question F5. Which maximum depth does the best combination use?
 #
 # Answer with a whole number, or -1 for no limit.
-f5_best_depth: int | None = None
+f5_best_depth: int | None = 8
 
 # Question F6. What is the test accuracy of your final tree? Copy it as it's
 # printed.
 #
 # Answer with a decimal number, such as 0.123.
-f6_test_accuracy: float | None = None
+f6_test_accuracy: float | None = "0.955"
 
 # -----------------------------------------------------------------------------
 # Task G — Wrap-up
