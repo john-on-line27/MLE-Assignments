@@ -49,29 +49,29 @@ c4_function_name: str | None = "train_test_split"
 # part they share.
 #
 # Answer with the shared start of their names, as a string.
-d1_method_prefix: str | None = None
+d1_method_prefix: str | None = "predict"
 
 # Question D2. While you're in `src/tree.py`: how many lines tall is the
 # tree?
 #
 # Answer with a whole number.
-d2_tree_height: int | None = None
+d2_tree_height: int | None = 20
 
 # Question D3. What sort of font can you find in `scripts/fit_tree.py`?
 #
 # Look in the file and answer with one letter, as a string, such as "a".
-d3_font: str | None = None
+d3_font: str | None = "serif"
 
 # Question D4. How many training points reached the root?
 #
 # Answer with a whole number.
-d4_root_samples: int | None = None
+d4_root_samples: int | None = 600
 
 # Question D5. Which feature does the root's question look at? Give the
 # number stored under `feature`.
 #
 # Answer with a whole number.
-d5_root_feature: int | None = None
+d5_root_feature: int | None = 1
 
 # -----------------------------------------------------------------------------
 # Task E — Evaluation
