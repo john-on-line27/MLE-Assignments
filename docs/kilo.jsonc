@@ -1,0 +1,57 @@
+// Kilo Code settings for KISSKI, the AI service for German universities.
+//
+// How to use it (see setup.md for the full steps):
+//   1. Put your KISSKI API key in the environment variable KISSKI_API_KEY.
+//   2. Copy this file to ~/.config/kilo/kilo.jsonc
+//   3. Start `kilo` inside an assignment folder.
+//
+// Keep this file in ~/.config/kilo/, not in an assignment folder: Kilo only
+// reads {env:...} values from this global file.
+{
+  "$schema": "https://app.kilo.ai/config.json",
+
+  // The model Kilo starts with: "<provider>/<model>". You can switch models
+  // inside Kilo with /models. Your editor may underline this line, because
+  // the schema only knows the models of big commercial providers. That's fine.
+  "model": "kisski/glm-5.3-flash",
+
+  // Never upload your chat sessions to share them.
+  "share": "disabled",
+
+  "provider": {
+    "kisski": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "KISSKI",
+      "options": {
+        "baseURL": "https://chat-ai.academiccloud.de/v1",
+        "apiKey": "{env:KISSKI_API_KEY}"
+      },
+      // A few of the models KISSKI offers. The full list is here:
+      // https://docs.hpc.gwdg.de/services/ai-services/chat-ai/models/index.html
+      // The limits are set lower than the models allow, to stay on the
+      // safe side.
+      "models": {
+        "qwen3-coder-next": {
+          "name": "Qwen 3 Coder Next",
+          "tool_call": true,
+          "limit": { "context": 131072, "output": 16384 }
+        },
+        "qwen3.6-35b-a3b": {
+          "name": "Qwen 3.6 35B A3B",
+          "tool_call": true,
+          "limit": { "context": 131072, "output": 16384 }
+        },
+        "gemma-4-31b-it": {
+          "name": "Gemma 4 31B Instruct",
+          "tool_call": true,
+          "limit": { "context": 131072, "output": 16384 }
+        },
+        "glm-5.3-flash": {
+          "name": "GLM 5.3 Flash",
+          "tool_call": true,
+          "limit": { "context": 131072, "output": 16384 }
+        }
+      }
+    }
+  }
+}

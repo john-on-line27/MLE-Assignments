@@ -1,0 +1,5 @@
+/data/
+/results/
+/submission.json
+/grader/grader.pyc
+__pycache__/
