@@ -12,7 +12,7 @@ then run `make submit` to create submission.json.
 # Question A1. `AGENTS.md` gives the assistant a name. What is it?
 #
 # Answer with the name, as a string.
-a1_agent_name: str | None = None
+a1_agent_name: str | None = "Bender"
 
 # -----------------------------------------------------------------------------
 # Task C — Data
@@ -20,25 +20,25 @@ a1_agent_name: str | None = None
 # Question C1. What is the default seed?
 #
 # Answer with a whole number.
-c1_default_seed: int | None = None
+c1_default_seed: int | None = 42
 
 # Question C2. Look through the rest of `src/config.py`. Is there another
 # seed in there?
 #
 # Answer with a string, such as "twine".
-c2_other_seed: str | None = None
+c2_other_seed: str | None = "acorns"
 
 # Question C3. Read through `src/data.py`. Besides the data generators, what
 # other kind of generator can you find in it?
 #
 # Answer with one letter, as a string, such as "cord".
-c3_other_generator: str | None = None
+c3_other_generator: str | None = "gas"
 
 # Question C4. Find the last section of `src/data.py`. What is the name of
 # the function just above it?
 #
 # Answer with the function name, as a string, without parentheses or arguments.
-c4_function_name: str | None = None
+c4_function_name: str | None = "train_test_split"
 
 # -----------------------------------------------------------------------------
 # Task D — Fitting
