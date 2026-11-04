@@ -178,7 +178,7 @@ f6_test_accuracy: float | None = "0.955"
 #   d) .gitignore
 #
 # Answer with one letter, as a string, such as "a".
-g1_versions_file: str | None = None
+g1_versions_file: str | None = "b"
 
 # Question G2. Which part of the data do you use to compare versions of a
 # model, for example trees of different depths?
@@ -188,7 +188,7 @@ g1_versions_file: str | None = None
 #   c) the test set
 #
 # Answer with one letter, as a string, such as "a".
-g2_compare_split: str | None = None
+g2_compare_split: str | None = "b"
 
 # Question G3. Why are `data/` and `results/` listed in `.gitignore`?
 #
@@ -199,7 +199,7 @@ g2_compare_split: str | None = None
 #   d) they're only used in Task F
 #
 # Answer with one letter, as a string, such as "a".
-g3_ignored_reason: str | None = None
+g3_ignored_reason: str | None = "c"
 
 # Question G4. What does `git add` do?
 #
@@ -209,7 +209,7 @@ g3_ignored_reason: str | None = None
 #   d) it uploads your work to the course website
 #
 # Answer with one letter, as a string, such as "a".
-g4_git_add: str | None = None
+g4_git_add: str | None = "b"
 
 # Question G5. What happens when a pre-commit check fails?
 #
@@ -219,4 +219,4 @@ g4_git_add: str | None = None
 #   d) nothing, the checks only run on the course website
 #
 # Answer with one letter, as a string, such as "a".
-g5_failed_check: str | None = None
+g5_failed_check: str | None = "b"
