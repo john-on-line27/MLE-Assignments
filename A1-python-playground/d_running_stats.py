@@ -52,6 +52,7 @@ class RunningStats:
         self._n = 0
         self._mean = 0.0
         self._M2 = 0.0
+        self.std = 0.0
 
     def update(self, x):
         """Add one value to the statistics."""
@@ -72,7 +73,7 @@ class RunningStats:
     def variance(self):
         """The sample variance. Raises StatisticsError for fewer than two
         values."""
-        if self._n < 1:
+        if self._n <= 1:
             raise StatisticsError("variance requires at least two values")
         return self._M2 / (self._n - 1)
 
@@ -133,6 +134,40 @@ class RunningStats:
         directly.)
         """
         # Write your solution here.
+        if not isinstance(other, RunningStats):
+            return NotImplemented
+
+        # If one side is empty, return a copy of the other side's stats
+        if self._n == 0:
+            res = RunningStats()
+            res._n = other._n
+            res._mean = other._mean
+            res._M2 = other._M2
+            return res
+
+        if other._n == 0:
+            res = RunningStats()
+            res._n = self._n
+            res._mean = self._mean
+            res._M2 = self._M2
+            return res
+
+        # Unpack stats from both streams
+        n_a, mean_a, M2_a = self._n, self._mean, self._M2
+        n_b, mean_b, M2_b = other._n, other._mean, other._M2
+
+        # Chan et al. parallel merge formula
+        n = n_a + n_b
+        delta = mean_b - mean_a
+        mean = mean_a + delta * n_b / n
+        M2 = M2_a + M2_b + (delta**2) * n_a * n_b / n
+
+        # Create and populate the new combined RunningStats object
+        res = RunningStats()
+        res._n = n
+        res._mean = mean
+        res._M2 = M2
+        return res
 
 
 # ---------------------------------------------------------------------------
