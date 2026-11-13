@@ -112,7 +112,7 @@ def normalize(text: str) -> list[str]:
         token.lower()
         for token in text.split()
         if any(c.isalpha() for c in token)
-        and token not in STOPWORDS
+        and token.lower() not in STOPWORDS
     ]  # fmt: skip
 
 
@@ -126,7 +126,7 @@ def word_frequencies(words: list[str]) -> dict[str, int]:
     counts: defaultdict[str, int] = defaultdict(int)
     for word in words:
         counts[word] += 1
-    ordered = sorted(counts.items(), key=lambda p: (p[1], p[0]), reverse=True)
+    ordered = sorted(counts.items(), key=lambda p: (-p[1], p[0]))
     return dict(ordered)
 
 
@@ -147,7 +147,7 @@ def format_entry(rank: int, word: str, count: int, total: int) -> str:
     Hint: https://docs.python.org/3/library/string.html#format-specification-mini-language
     """
 
-    pct = count // total * 100
+    pct = count / total * 100
     return f"{rank:>4}. {word:<20}{count:>6}{pct:>8.2f}%"
 
 
@@ -186,7 +186,7 @@ def write_report(source: str, output_path: str | Path, top_n: int = 10) -> None:
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
 
-        mode = "a"
+        mode = "w"
         with path.open(mode) as f:
             f.write(f"{'Rank':>5} {'Word':<20}{'Count':>6}{'   %':>8}\n")
             f.write("-" * 42 + "\n")

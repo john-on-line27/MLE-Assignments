@@ -50,8 +50,21 @@ def foobar_word(n: int) -> str:
     Returns:
         str -- the word to print for n
     """
-
+    res = ""
     # Write your solution here.
+
+    if n % 3 == 0:
+        res += "Foo"
+    if n % 5 == 0:
+        res += "Bar"
+    if n % 7 == 0:
+        res += "Bop"
+    if n % 11 == 0:
+        res += "Bap"
+    if res == "":
+        res += str(n)
+
+    return res
 
 
 def foobar(start: int, stop: int) -> None:
@@ -64,6 +77,8 @@ def foobar(start: int, stop: int) -> None:
     """
 
     # Write your solution here.
+    for i in range(start, stop):
+        print(foobar_word(i))
 
 
 # ---------------------------------------------------------------------------
