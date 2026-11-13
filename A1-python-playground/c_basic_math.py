@@ -94,8 +94,13 @@ def quadratic_formula(a: float, b: float, c: float) -> tuple:
     there are no real roots, return an empty tuple. If there is exactly one
     (the discriminant is exactly 0), return a tuple with just that root.
     """
+    discriminant = b**2 - 4 * a * c
+    if discriminant < 0:
+        return ()
 
     # Write your solution here.
+    p2 = math.sqrt(b**2 - 4 * a * c)
+    return tuple(sorted(set([(-b + p2) / (2 * a), (-b - p2) / (2 * a)])))
 
 
 # ---------------------------------------------------------------------------
@@ -122,6 +127,13 @@ def softmax(xs: list[float]) -> list[float]:
     """
 
     # Write your solution here.
+    if len(xs) == 0:
+        raise ValueError("expected a nonnegative input, got negative discriminant")
+
+    mx = max(xs)
+    new_xs = [math.exp(number - mx) for number in xs]
+    new_val = sum(new_xs)
+    return [number / new_val for number in new_xs]
 
 
 if __name__ == "__main__":
