@@ -142,6 +142,15 @@ def take(iterable, n):
     """
     # Write your solution here.
 
+    iterator = iter(iterable)
+    result = []
+    for _ in range(n):
+        try:
+            result.append(next(iterator))
+        except StopIteration:
+            break
+    return result
+
 
 def take_demo():
     return take(noisy_range(100), 2)
@@ -290,13 +299,15 @@ class ShuffledSampler(Sampler):
 
     # Write your solution here, in place of the placeholder below, which only keeps
     # the file running.
-    def __init__(self, n_samples, batch_size, seed=None):
-        self.n_samples = n_samples
-        self.batch_size = batch_size
+    def __init__(self, *args, seed=None, **kwargs):
+        super().__init__(*args, **kwargs)
         self.seed = seed
 
     def indices(self):
-        return []
+        ret = list(range(self.n_samples))
+        rng = random.Random(self.seed)
+        rng.shuffle(ret)
+        return ret
 
 
 def positional_seed_demo():
