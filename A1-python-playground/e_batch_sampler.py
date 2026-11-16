@@ -83,10 +83,10 @@ def twice_demo():
 
 # ⭐ CORE
 # Q2a. How many lines does `create_demo()` print?
-LINES_ON_CREATE = None
+LINES_ON_CREATE = 0
 
 # Q2b. What does `twice_demo()` return? Give a tuple of two lists.
-TWO_PASSES_OF_CHUNKS = None
+TWO_PASSES_OF_CHUNKS: tuple[list[list[int]], list[list[int]]] = ([[1, 2], [3]], [])
 
 
 # A list comprehension `[...]` and a generator expression `(...)` look
@@ -107,16 +107,16 @@ def size_demo(n):
 
 
 # Q2c. How many lines does `comprehension_demo()` print?
-LINES_ON_COMPREHENSION = None
+LINES_ON_COMPREHENSION = 3
 
 # ⭐ CORE
 # Q2d. What does `comprehension_demo()` return? Give a tuple of two strings.
-COMPREHENSION_TYPES = None
+COMPREHENSION_TYPES = ("list", "generator")
 
 # ⭐ CORE
 # Q2e. Compare `size_demo(10)` with `size_demo(10_000)`. One of the two
 #      sizes stays the same. Which one? Answer "list" or "generator".
-CONSTANT_SIZE = None
+CONSTANT_SIZE = "generator"
 
 
 # ---------------------------------------------------------------------------
@@ -157,7 +157,7 @@ def take_demo():
 
 
 # Q3. How many lines does `take_demo()` print? Assume `take` is correct.
-LINES_ON_TAKE = None
+LINES_ON_TAKE = 2
 
 
 # ---------------------------------------------------------------------------
@@ -181,10 +181,10 @@ def first_satisfying(iterable, predicate):
 
 # ⭐ CORE
 # Q4a. What does `first_satisfying([4, 7, 2, 9], lambda x: x > 6)` return?
-FIRST_MATCH = None
+FIRST_MATCH = (7, 1)
 
 # Q4b. What does `first_satisfying([1, 2, 3], lambda x: x > 10)` return?
-NO_MATCH = None
+NO_MATCH = (None, -1)
 
 
 # ---------------------------------------------------------------------------
@@ -320,26 +320,26 @@ def positional_seed_demo():
 
 # Q5a. What does `abstract_demo()` return? Give the name of the exception
 #      as a string, or "no error".
-ABSTRACT_RESULT = None
+ABSTRACT_RESULT = "TypeError"
 
 # ⭐ CORE
 # Q5b. What does `one_shot_demo()` return? Give a tuple of two ints.
-ONE_SHOT_PASSES = None
+ONE_SHOT_PASSES = (2, 0)
 
 # Q5c. What does `sequential_demo()` return? Give a tuple of two ints.
-SEQUENTIAL_PASSES = None
+SEQUENTIAL_PASSES = (2, 2)
 
 # Q5d. Suppose `OneShotSampler.__next__` had `return None` where it now has
 #      `raise StopIteration`. What would `take(OneShotSampler(6, 3), 4)`
 #      return then? (Don't try `list(...)` on that sampler: it would never
 #      stop.)
-TAKE_WITHOUT_STOP = None
+TAKE_WITHOUT_STOP = [[0, 1, 2], [3, 4, 5], None, None]
 
 # ⭐ CORE
 # Q5e. What does `positional_seed_demo()` return? Assume your
 #      `ShuffledSampler` works as its docstring says (the placeholder
 #      doesn't). If it raises, give the name of the exception as a string.
-POSITIONAL_SEED_RESULT = None
+POSITIONAL_SEED_RESULT = "TypeError"
 
 
 if __name__ == "__main__":

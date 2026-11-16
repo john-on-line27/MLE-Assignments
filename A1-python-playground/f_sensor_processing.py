@@ -72,7 +72,7 @@ def compose_demo():
 
 # ⭐ CORE
 # Q1. What does `compose_demo()` return? Give a tuple of two numbers.
-COMPOSE_RESULT = None
+COMPOSE_RESULT = (7, 8)
 
 
 # ---------------------------------------------------------------------------
@@ -94,6 +94,10 @@ def pipeline(data, *stages):
         [1.0, 3.0]
     """
     # Write your solution here.
+    current = data
+    for fn, kwargs in stages:
+        current = fn(current, **kwargs)
+    return current
 
 
 # ---------------------------------------------------------------------------
@@ -116,7 +120,7 @@ def make_clipper(lo, hi):
 
     # Write your solution here, in place of the placeholder below, which only keeps
     # the file running.
-    return lambda readings: readings
+    return lambda readings: [max(lo, min(hi, r)) for r in readings]
 
 
 # ---------------------------------------------------------------------------
@@ -130,7 +134,7 @@ def late_binding_demo():
 
 
 # Q4a. What does `late_binding_demo()` return? Give a list of three numbers.
-LATE_BINDING_RESULT = None
+LATE_BINDING_RESULT = [12, 12, 12]
 
 
 def default_arg_demo():
@@ -139,7 +143,7 @@ def default_arg_demo():
 
 
 # Q4b. What does `default_arg_demo()` return?
-DEFAULT_ARG_RESULT = None
+DEFAULT_ARG_RESULT = [10, 11, 12]
 
 
 def make_counter():
@@ -161,7 +165,7 @@ def counter_demo():
 
 
 # Q4c. What does `counter_demo()` return? Give a string.
-COUNTER_RESULT = None
+COUNTER_RESULT = "UnboundLocalError"
 
 
 threshold = 0.5
@@ -177,7 +181,7 @@ def shadowing_demo():
 
 
 # Q4d. What does `shadowing_demo()` return?
-SHADOWING_RESULT = None
+SHADOWING_RESULT = 0.5
 
 
 # ---------------------------------------------------------------------------
@@ -197,12 +201,12 @@ def amplify(readings: list[float], gain: int) -> list[float]:
 
 
 # Q5a. What does `amplify([1.0, 2.0], 2)` return?
-AMPLIFY_LIST = None
+AMPLIFY_LIST = [1.0, 2.0, 1.0, 2.0]
 
 # ⭐ CORE
 # Q5b. What does `amplify("ab", 2)` return? If an exception is raised, give
 #      its name as a string.
-AMPLIFY_STR = None
+AMPLIFY_STR = "abab"
 
 
 # `mean_or_none` has a typo. ruff and mypy both report it, which is why the
@@ -227,7 +231,7 @@ def typo_demo():
 
 # ⭐ CORE
 # Q5c. What does `typo_demo()` return? Give a tuple of a number and a string.
-TYPO_RESULT = None
+TYPO_RESULT = (2.0, "NameError")
 
 
 # ---------------------------------------------------------------------------

@@ -52,7 +52,7 @@ class RunningStats:
         self._n = 0
         self._mean = 0.0
         self._M2 = 0.0
-        self.std = 0.0
+        self._std = 0.0
 
     def update(self, x):
         """Add one value to the statistics."""
@@ -61,6 +61,8 @@ class RunningStats:
         self._mean += delta / self._n
         delta2 = x - self._mean
         self._M2 += delta * delta2
+        if self._n > 1:
+            self._std = self.std
 
     @property
     def mean(self):
@@ -77,9 +79,12 @@ class RunningStats:
             raise StatisticsError("variance requires at least two values")
         return self._M2 / (self._n - 1)
 
+    @property
     def std(self):
         """The sample standard deviation, the square root of the variance.
         Raises StatisticsError for fewer than two values."""
+        if self._n <= 1:
+            raise StatisticsError("mean requires at least one value")
         return math.sqrt(self.variance)
 
     def __len__(self):
@@ -194,16 +199,16 @@ def add_number_demo():
 # Q1. Each of the three strings that `text_demo()` returns was made by
 #     either `__str__` or `__repr__` of `rs`. Which one, for each string?
 #     Give a list of three strings, each "str" or "repr".
-TEXT_METHODS = None
+TEXT_METHODS = list(["str", "repr", "repr"])
 
 # Q2. What does `add_number_demo()` return? Assume your `__add__` is
 #     correct. Give the name of the exception as a string, or "no error".
-ADD_NUMBER_RESULT = None
+ADD_NUMBER_RESULT = "TypeError"
 
 # Q3. Suppose `__add__` had no `isinstance` check, so it started right away
 #     by reading `other._n`. What would `add_number_demo()` return then?
 #     Give the name of the exception as a string, or "no error".
-ADD_WITHOUT_CHECK_RESULT = None
+ADD_WITHOUT_CHECK_RESULT = "AttributeError"
 
 
 if __name__ == "__main__":
