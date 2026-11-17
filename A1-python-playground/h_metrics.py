@@ -103,11 +103,11 @@ def frozen_demo():
 ###############################################################################
 
 # Q1. What does `equality_demo()` return? Give True or False.
-EQUAL_COUNTS = None
+EQUAL_COUNTS = True
 
 # Q2. What does `frozen_demo()` return? If an exception is raised, give its
 #     name as a string. Otherwise, give the new value of `c.tp`.
-FROZEN_RESULT = None
+FROZEN_RESULT = "FrozenInstanceError"
 
 ###############################################################################
 
@@ -133,9 +133,9 @@ def binary_confusion(y_true: list, y_pred: list, pos_label) -> ConfusionCounts:
         match (true == pos_label, pred == pos_label):
             case (True, True):
                 tp += 1
-            case (False, True):
-                fn += 1
             case (True, False):
+                fn += 1
+            case (False, True):
                 fp += 1
             case (False, False):
                 tn += 1
@@ -162,7 +162,7 @@ def multiclass_report(y_true: list, y_pred: list) -> dict[str, ConfusionCounts]:
         ConfusionCounts(tp=0, fp=1, fn=0, tn=2)
     """
 
-    classes = sorted(set(y_true))
+    classes = sorted(set(y_true).union(y_pred))
     return {cls: binary_confusion(y_true, y_pred, pos_label=cls) for cls in classes}
 
 
@@ -202,7 +202,7 @@ def aggregate_metrics(
 
         case "weighted":
             total = len(y_true)
-            support = {cls: c.tp + c.fp for cls, c in report.items()}
+            support = {cls: c.tp + c.fn for cls, c in report.items()}
             p = sum(c.precision * support[cls] for cls, c in report.items()) / total
             r = sum(c.recall * support[cls] for cls, c in report.items()) / total
             f = sum(c.f1 * support[cls] for cls, c in report.items()) / total
@@ -274,11 +274,11 @@ def score_sorting_demo():
 
 # ⭐ CORE
 # Q3. What does `score_equality_demo()` return? Give True or False.
-EQUAL_SCORES = None
+EQUAL_SCORES = True
 
 # ⭐ CORE
 # Q4. What does `score_sorting_demo()` return? Give a list of strings.
-SORTED_NAMES = None
+SORTED_NAMES = ["dog", "cat", "bird"]
 
 ###############################################################################
 
