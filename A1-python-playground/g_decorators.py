@@ -143,7 +143,15 @@ def count_calls(fn):
 
     # Write your solution here, in place of the placeholder below, which only keeps
     # the file running.
-    return fn
+    def wrapper(*args, **kwargs):
+        wrapper.calls = wrapper.calls + 1
+        result = fn(*args, **kwargs)
+        return result
+
+    wrapper.calls = 0
+    wrapper.__name__ = fn.__name__
+    wrapper.__doc__ = fn.__doc__
+    return wrapper
 
 
 # ---------------------------------------------------------------------------
@@ -216,17 +224,17 @@ class LeakyReLU:
 # ⭐ CORE
 # Q3a. Suppose you import this file and call none of its functions. What is
 #      `sorted(ACTIVATIONS)` then? Give a list of strings.
-REGISTERED_AT_IMPORT = None
+REGISTERED_AT_IMPORT = ["identity", "leaky_relu", "relu", "sigmoid"]
 
 # ⭐ CORE
 # Q3b. Is `relu is ACTIVATIONS["relu"]` True or False?
-RELU_IS_STORED_FUNCTION = None
+RELU_IS_STORED_FUNCTION = True
 
 # Q3c. What is `type(ACTIVATIONS["leaky_relu"](-2.0)).__name__`?
-LEAKY_CALL_TYPE = None
+LEAKY_CALL_TYPE = "LeakyReLU"
 
 # Q3d. What is `ACTIVATIONS["leaky_relu"]()(-2.0)`?
-LEAKY_VALUE = None
+LEAKY_VALUE = -0.02
 
 
 # ---------------------------------------------------------------------------
@@ -274,8 +282,17 @@ def retry(times, exceptions=(Exception,)):
     # the file running.
     def decorator(fn):
         def wrapper(*args, **kwargs):
-            return None
+            for i in range(times):
+                try:
+                    ret = fn(*args, **kwargs)
+                    return ret
+                except exceptions as e:
+                    print(f"attempt {i + 1}/{times} failed: {type(e).__name__}")
+                    if i + 1 == times:
+                        raise e
 
+        wrapper.__name__ = fn.__name__
+        wrapper.__doc__ = fn.__doc__
         return wrapper
 
     return decorator
@@ -299,15 +316,15 @@ def train_step(batch):
 # ⭐ CORE
 # Q5a. When you call `train_step([1.0, 2.0])`, which wrapper starts running
 #      first? Answer "log_calls" or "count_calls".
-RUNS_FIRST = None
+RUNS_FIRST = "log_calls"
 
 # Q5b. What is `train_step.__name__`?
-STACKED_NAME = None
+STACKED_NAME = "train_step"
 
 # Q5c. Suppose `count_calls` did NOT copy `__name__` onto its inner
 #      function, which is named `wrapper`, but `log_calls` still did. What
 #      would `train_step.__name__` be then?
-STACKED_NAME_WITHOUT_WRAPS = None
+STACKED_NAME_WITHOUT_WRAPS = "wrapper"
 
 
 # ---------------------------------------------------------------------------
@@ -337,7 +354,7 @@ def cache_demo():
 
 # ⭐ CORE
 # Q6. How many lines does `cache_demo()` print?
-CACHE_LINES = None
+CACHE_LINES = 2
 
 
 # ---------------------------------------------------------------------------
