@@ -100,25 +100,25 @@ def free_demo():
 
 # ⭐ CORE
 # Q1a. What does `aliasing_demo()` return? Give a tuple of four lists.
-ALIASING_RESULT = None
+ALIASING_RESULT = ([1, 2, 3, 5], [1, 2, 3, 5], [1, 2, 3, 4], [1, 2, 3, 5])
 
 # ⭐ CORE
 # Q1b. At the end of `aliasing_demo`, which of the names `b`, `c` and `d`
 #      point to the same object as `a`? Give a list of names as strings,
 #      in alphabetical order, e.g. ["b", "c"].
-SAME_OBJECT_AS_A = None
+SAME_OBJECT_AS_A = ["b", "d"]
 
 # Q1c. What does `tuple_demo()` return? Give a tuple of two tuples.
-TUPLE_DEMO_RESULT = None
+TUPLE_DEMO_RESULT = ((1, 2), (1, 2, 3))
 
 # ⭐ CORE
 # Q1d. What does `id_demo()` return? Give a tuple of two booleans.
-ID_DEMO_RESULT = None
+ID_DEMO_RESULT = (True, False)
 
 # ⭐ CORE
 # Q1e. Which lines does `free_demo()` print, in order? Give a list of
 #      strings, one per line.
-FREE_DEMO_LINES = None
+FREE_DEMO_LINES = ["after del a", "freed", "end"]
 
 
 # ---------------------------------------------------------------------------
@@ -145,13 +145,13 @@ def add_batch(batch, history=[]):  # noqa: B006
 # Give each return value as it looks right after its call.
 
 # Q2a. What does `add_batch("b")` return?
-SECOND_CALL = None
+SECOND_CALL = ["a", "b"]
 
 # Q2b. What does `add_batch("c", [])` return?
-EXPLICIT_LIST_CALL = None
+EXPLICIT_LIST_CALL = ["c"]
 
 # Q2c. What does `add_batch("d")` return?
-FOURTH_CALL = None
+FOURTH_CALL = ["a", "b", "d"]
 
 
 # ---------------------------------------------------------------------------
@@ -174,10 +174,10 @@ def copy_demo():
 # way down.
 
 # Q3a. In the dict that `copy_demo()` returns, what is the value of "lr"?
-CONFIG_LR = None
+CONFIG_LR = 0.1
 
 # Q3b. In the same dict, what is the value of "layers"?
-CONFIG_LAYERS = None
+CONFIG_LAYERS = [64, 32, 16]
 
 
 # ---------------------------------------------------------------------------
@@ -205,7 +205,7 @@ def center(rows):
     """
 
     means = [sum(column) / len(rows) for column in zip(*rows)]
-    result = rows[:]
+    result = copy.deepcopy(rows[:])
     for row in result:
         for j in range(len(row)):
             row[j] -= means[j]
@@ -233,10 +233,10 @@ class SharedDataset:
 #     test = SharedDataset([4, 5])
 
 # Q5a. What is `len(test.samples)`?
-TEST_LENGTH = None
+TEST_LENGTH = 5
 
 # Q5b. Is `train.samples is test.samples` True or False?
-SAMPLES_SHARED = None
+SAMPLES_SHARED = True
 
 
 # ⭐ CORE
@@ -272,7 +272,21 @@ class ListDataset:
         False
     """
 
-    # Write your solution here.
+    def __init__(self, samples):
+        self.samples = list(samples)
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, index):
+        return self.samples[index]
+
+    def __iter__(self):
+        for i in range(len(self.samples)):
+            yield self.samples[i]
+
+    def append(self, sample):
+        self.samples.append(sample)
 
 
 # ---------------------------------------------------------------------------
