@@ -125,7 +125,7 @@ def timing_demo(n=1_000_000, precision=4):
 # ⭐ CORE
 # Q1. Run `timing_demo()`. Both functions compute the same sum. Which one
 #     is faster? Answer "loop" or "builtin".
-FASTER_SUM = None
+FASTER_SUM = "builtin"
 
 
 # ---------------------------------------------------------------------------
@@ -169,7 +169,12 @@ def seeded(seed):
 
     # Write your solution here, in place of the placeholder below, which only keeps
     # the file running.
-    yield
+    new_seed = random.getstate()
+    random.seed(seed)
+    try:
+        yield
+    finally:
+        random.setstate(new_seed)
 
 
 # ---------------------------------------------------------------------------
@@ -207,12 +212,12 @@ def nested_demo():
 #      `nested_demo()`, in order? Give a list of strings, one per line,
 #      e.g. ["enter outer", ...]. Leave out the traceback (the error
 #      message) that Python prints if an exception is not caught.
-NESTED_LINES = None
+NESTED_LINES = ["enter outer", "enter inner", "body", "exit inner", "exit outer"]
 
 # ⭐ CORE
 # Q3b. Does the `ValueError` reach the code that called `nested_demo()`?
 #      Answer True or False.
-NESTED_RAISES = None
+NESTED_RAISES = True
 
 
 # ---------------------------------------------------------------------------
@@ -241,12 +246,12 @@ def count_good_batches(batches):
 
 
 # Q4a. What does `count_good_batches([[1, 2], [], [3], []])` return?
-GOOD_BATCHES = None
+GOOD_BATCHES = 2
 
 # Q4b. What happens when you call `count_good_batches([[1, 2], None, [3]])`?
 #      If it returns, give the return value. If an exception reaches the
 #      caller, give the name of the exception as a string, e.g. "KeyError".
-GOOD_BATCHES_WITH_NONE = None
+GOOD_BATCHES_WITH_NONE = "TypeError"
 
 
 # ---------------------------------------------------------------------------

@@ -32,7 +32,7 @@ c2_other_seed: str | None = "acorns"
 # other kind of generator can you find in it?
 #
 # Answer with one letter, as a string, such as "cord".
-c3_other_generator: str | None = "gas"
+c3_other_generator: str | None = "petrol"
 
 # Question C4. Find the last section of `src/data.py`. What is the name of
 # the function just above it?
@@ -55,7 +55,7 @@ d1_method_prefix: str | None = "predict"
 # tree?
 #
 # Answer with a whole number.
-d2_tree_height: int | None = 20
+d2_tree_height: int | None = 416
 
 # Question D3. What sort of font can you find in `scripts/fit_tree.py`?
 #
@@ -164,7 +164,7 @@ f5_best_depth: int | None = 8
 # printed.
 #
 # Answer with a decimal number, such as 0.123.
-f6_test_accuracy: float | None = "0.955"
+f6_test_accuracy: float | None = 0.955
 
 # -----------------------------------------------------------------------------
 # Task G — Wrap-up

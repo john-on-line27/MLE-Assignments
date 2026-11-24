@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: uv run --project A2-numpy-playground mypy --config-file A2-numpy-playground/pyproject.toml
+        language: system
+        types: [python]
+        files: '^A2-numpy-playground/'
+        # Not the puzzle files: their stubs and planted bugs are type errors
+        # until the student has solved them, and must not block commits.
+        exclude: '^A2-numpy-playground/[a-j]_.*\.py$'
+        # One mypy run over all files; parallel runs share .mypy_cache.
+        require_serial: true
