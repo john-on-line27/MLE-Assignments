@@ -66,15 +66,15 @@ X = np.zeros((8, 3, 32, 32))
 # ⭐ CORE
 # Q1. Fill in the shape of each expression.
 SHAPES: dict[str, object] = {
-    "X[0]": None,
-    "X[0:1]": None,
-    "X[:, 0]": None,
-    "X[..., 0]": None,
-    "X[:, :, ::2, ::2]": None,
-    "X[:, None]": None,
-    "X[[0, 2, 2]]": None,
-    "X[:, [0]]": None,
-    "X[-1, -1, -1]": None,
+    "X[0]": (3, 32, 32),
+    "X[0:1]": (1, 3, 32, 32),
+    "X[:, 0]": (8, 32, 32),
+    "X[..., 0]": (8, 3, 32),
+    "X[:, :, ::2, ::2]": (8, 3, 16, 16),
+    "X[:, None]": (8, 1, 3, 32, 32),
+    "X[[0, 2, 2]]": (3, 3, 32, 32),
+    "X[:, [0]]": (8, 1, 32, 32),
+    "X[-1, -1, -1]": (32,),
 }
 
 
@@ -95,7 +95,7 @@ probs = np.array(
 labels = np.array([1, 0, 2, 1])
 
 # Q2a. What is `probs[np.arange(4), labels]`? Give a list.
-PICKED = None
+PICKED = [0.7, 0.5, 0.6, 0.4]
 
 # An embedding table with one 16-dimensional vector for each of 100 tokens,
 # and a batch of 2 token sequences of length 3.
@@ -103,7 +103,7 @@ embeddings = np.zeros((100, 16))
 tokens = np.array([[5, 7, 7], [1, 0, 99]])
 
 # Q2b. What is the shape of `embeddings[tokens]`?
-EMBEDDED_SHAPE = None
+EMBEDDED_SHAPE = (2, 3, 16)
 
 
 # ---------------------------------------------------------------------------
@@ -113,19 +113,19 @@ EMBEDDED_SHAPE = None
 x = np.array([3, -1, 4, -1, 5, -9])
 
 # Q3a. What is `x[(x > 0) & (x < 5)]`? Give a list.
-BETWEEN = None
+BETWEEN = [3, 4]
 
 # Q3b. What is `x[(x > 0) and (x < 5)]`? Give a list, or "error".
-WITH_AND = None
+WITH_AND = "error"
 
 # Q3c. What is `np.where(x > 0, x, 0)`? Give a list.
-WHERE_RESULT = None
+WHERE_RESULT = [3, 0, 4, 0, 5, 0]
 
 # Q3d. `data` has shape (6, 4), one row per sample, and `y` holds the label
 #      of each sample. What is the shape of `data[y == 1]`?
 data = np.arange(24).reshape(6, 4)
 y = np.array([0, 1, 1, 0, 1, 0])
-MASKED_ROWS_SHAPE = None
+MASKED_ROWS_SHAPE = (3, 4)
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +151,7 @@ def cross_entropy(probs: np.ndarray, labels: np.ndarray) -> float:
         0.39925...   # the mean of -log(0.5) and -log(0.9)
     """
 
-    true_class_probs = probs[:, labels]
+    true_class_probs = probs[np.arange(len(labels)), labels]
     return float(-np.log(true_class_probs).mean())
 
 
@@ -168,7 +168,7 @@ def prune_weights(W: np.ndarray, threshold: float) -> np.ndarray:
                [ 0. , -2. ]])
     """
 
-    return W[np.abs(W) >= threshold]
+    return np.where(np.abs(W) >= threshold, W, 0)
 
 
 if __name__ == "__main__":
