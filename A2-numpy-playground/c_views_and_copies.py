@@ -75,7 +75,7 @@ def write_demo():
 
 
 # Q1a. What does `write_demo()` return? Give a list.
-WRITE_DEMO_RESULT = None
+WRITE_DEMO_RESULT = [0, 100, 2, 3, 4, 300]
 
 
 # ⭐ CORE
@@ -92,7 +92,7 @@ WRITE_DEMO_RESULT = None
 #      H  a.astype(np.int64)
 #      I  np.asarray(a)
 #      J  np.array(a)
-SHARES_MEMORY = None
+SHARES_MEMORY = ["a", "c", "e", "g", "i"]
 
 
 def assignment_demo():
@@ -105,7 +105,7 @@ def assignment_demo():
 
 
 # Q1c. What does `assignment_demo()` return? Give a list.
-ASSIGNMENT_DEMO_RESULT = None
+ASSIGNMENT_DEMO_RESULT = [1.0, 1.0, 3.0, 4.0, 4.0]
 
 
 # ---------------------------------------------------------------------------
@@ -137,8 +137,9 @@ def iterate_minibatches(X: np.ndarray, batch_size: int) -> Iterator[np.ndarray]:
 
     for start in range(0, len(X), batch_size):
         batch = X[start : start + batch_size]
-        batch /= 255.0
-        yield batch
+        temp = np.array(batch)
+        temp /= 255.0
+        yield temp
 
 
 # ⭐ CORE
@@ -159,7 +160,7 @@ def sgd_step(params: list[np.ndarray], grads: list[np.ndarray], lr: float) -> No
     """
 
     for p, g in zip(params, grads):
-        p = p - lr * g
+        p -= lr * g
 
 
 if __name__ == "__main__":

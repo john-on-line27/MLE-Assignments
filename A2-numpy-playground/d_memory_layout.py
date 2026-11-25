@@ -68,22 +68,22 @@ import numpy as np
 x = np.zeros((2, 3, 4), dtype=np.float32)
 
 # Q1a. What is `x.strides`?
-X_STRIDES = None
+X_STRIDES = (48, 16, 4)
 
 # Q1b. At which byte offset from the start of the memory block is
 #      `x[1, 2, 3]`?
-OFFSET_OF_1_2_3 = None
+OFFSET_OF_1_2_3 = 92
 
 # Q1c. What is `x[:, ::2].strides`?
-X_STEP_STRIDES = None
+X_STEP_STRIDES = (48, 32, 4)
 
 # ⭐ CORE
 # Q1d. What are the shape and the strides of `x.transpose(0, 2, 1)`? Give a
 #      tuple (shape, strides).
-X_TRANSPOSED_SHAPE_AND_STRIDES = None
+X_TRANSPOSED_SHAPE_AND_STRIDES = ((2, 4, 3), (48, 4, 16))
 
 # Q1e. Let `a = np.arange(24).reshape(2, 3, 4)`. What is `a.T[3, 1, 0]`?
-A_T_ELEMENT = None
+A_T_ELEMENT = np.int64(7)
 
 
 # ---------------------------------------------------------------------------
@@ -101,11 +101,11 @@ A_T_ELEMENT = None
 #      E  m[:, 0]
 #      F  m.reshape(6, 4)
 #      G  np.ascontiguousarray(m.T)
-CONTIGUOUS = None
+CONTIGUOUS = ["b", "f", "g"]
 
 # ⭐ CORE
 # Q2b. Does `m.T.reshape(-1)` share memory with `m`? Give True or False.
-TRANSPOSE_RESHAPE_SHARES_MEMORY = None
+TRANSPOSE_RESHAPE_SHARES_MEMORY = False
 
 
 # ---------------------------------------------------------------------------
@@ -122,14 +122,14 @@ windows = np.lib.stride_tricks.sliding_window_view(signal, 3)
 tiled = np.broadcast_to(np.arange(3), (1000, 3))
 
 # Q3a. What is `windows.tolist()`?
-WINDOWS = None
+WINDOWS = [[0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 5]]
 
 # Q3b. What is `windows.strides`?
-WINDOWS_STRIDES = None
+WINDOWS_STRIDES = (8, 8)
 
 # Q3c. What is `tiled.strides`? (Puzzle f comes back to this: it is how
 #      broadcasting "stretches" an array without copying it.)
-TILED_STRIDES = None
+TILED_STRIDES = (0, 8)
 
 
 # ---------------------------------------------------------------------------
@@ -184,8 +184,15 @@ def c_order_strides(shape: tuple[int, ...], itemsize: int) -> tuple[int, ...]:
         (8,)
     """
 
-    # Your solution here.
-    pass
+    strides: list[int] = []
+    stride = itemsize
+
+    for dim in reversed(shape):
+        strides.append(stride)
+        stride *= dim
+
+    strides.reverse()
+    return tuple(strides)
 
 
 def is_c_contiguous(shape: tuple[int, ...], strides: tuple[int, ...], itemsize: int) -> bool:
@@ -208,7 +215,18 @@ def is_c_contiguous(shape: tuple[int, ...], strides: tuple[int, ...], itemsize: 
     """
 
     # Your solution here.
-    pass
+    if any(dim == 0 for dim in shape):
+        return True
+
+    expected_stride = itemsize
+    for dim, actual_stride in reversed(list(zip(shape, strides))):
+        if dim == 1:
+            continue
+        if actual_stride != expected_stride:
+            return False
+        expected_stride *= dim
+
+    return True
 
 
 if __name__ == "__main__":

@@ -69,27 +69,27 @@ import numpy as np
 #      first shape and `b` the second, or "error" if they don't broadcast.
 #      (`()` is the shape of a single number.)
 BROADCAST_SHAPES: dict[str, object] = {
-    "(3, 4) + (4,)": None,
-    "(3, 4) + (3,)": None,
-    "(3, 4) + (3, 1)": None,
-    "(3, 1) + (1, 4)": None,
-    "(5,) + (5, 1)": None,
-    "(2, 3, 4) + (3, 4)": None,
-    "(2, 3, 4) + (2, 4)": None,
-    "(2, 3, 4) + (2, 1, 4)": None,
-    "(8, 1, 6, 1) + (7, 1, 5)": None,
-    "() + (3, 3)": None,
+    "(3, 4) + (4,)": (3, 4),
+    "(3, 4) + (3,)": "error",
+    "(3, 4) + (3, 1)": (3, 4),
+    "(3, 1) + (1, 4)": (3, 4),
+    "(5,) + (5, 1)": (5, 5),
+    "(2, 3, 4) + (3, 4)": (2, 3, 4),
+    "(2, 3, 4) + (2, 4)": "error",
+    "(2, 3, 4) + (2, 1, 4)": (2, 3, 4),
+    "(8, 1, 6, 1) + (7, 1, 5)": (8, 7, 6, 5),
+    "() + (3, 3)": (3, 3),
 }
 
 # Q1b. What is `np.broadcast_shapes((8, 1, 3), (5, 1), (3,))`? Work it out
 #      by hand first, then run it to check.
-THREE_WAY_SHAPE = None
+THREE_WAY_SHAPE = (8, 5, 3)
 
 rows = np.array([1, 2, 3])
 cols = np.array([10, 20])
 
 # Q1c. What is `np.maximum(rows[:, None], cols // 10).tolist()`?
-MAXIMUM_TABLE = None
+MAXIMUM_TABLE = [[1, 2], [2, 2], [3, 3]]
 
 
 # ---------------------------------------------------------------------------
@@ -130,7 +130,7 @@ def pairwise_sq_distances(X: np.ndarray, Y: np.ndarray) -> np.ndarray:
 # Q2a. `X` holds 1000 samples with 64 features and `Y` holds 500 samples
 #      with 64 features. What is the shape of `diff` inside
 #      `pairwise_sq_distances(X, Y)`?
-DIFF_SHAPE = None
+DIFF_SHAPE = (1000, 500, 64)
 
 # Broadcasting doesn't copy its *inputs*, but the *result* of the
 # subtraction is a real, new array. With the X and Y from Q2a, `diff` takes
@@ -139,7 +139,7 @@ DIFF_SHAPE = None
 # Q2b. What would `pairwise_sq_distances(X, Y)` return if you wrote
 #      `X[:, None, :] - Y[:, None, :]` instead, with the same X (1000, 64)
 #      and Y (500, 64)? Give its shape, or "error".
-WRONG_AXES_SHAPE = None
+WRONG_AXES_SHAPE = "error"
 
 
 # ---------------------------------------------------------------------------
@@ -165,7 +165,7 @@ def mse(y_pred: np.ndarray, y_true: np.ndarray) -> float:
         2.0
     """
 
-    errors = y_pred - y_true
+    errors = y_pred - y_true[:, None]
     return float((errors**2).mean())
 
 
@@ -180,7 +180,7 @@ def scale_rows(X: np.ndarray, s: np.ndarray) -> np.ndarray:
                [10., 20., 30.]])
     """
 
-    return X * s
+    return X * s[:, None]
 
 
 if __name__ == "__main__":

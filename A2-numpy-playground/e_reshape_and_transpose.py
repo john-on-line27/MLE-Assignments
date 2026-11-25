@@ -76,16 +76,16 @@ g = np.arange(12).reshape(3, 4)  # [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]
 a = np.arange(6).reshape(2, 3)  # [[0, 1, 2], [3, 4, 5]]
 
 # Q1a. What is `g.reshape(4, -1).tolist()`?
-RESHAPED = None
+RESHAPED = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11]]
 
 # Q1b. What is `a.T.tolist()`?
-TRANSPOSED = None
+TRANSPOSED = [[0, 3], [1, 4], [2, 5]]
 
 # Q1c. What is `a.T.reshape(-1).tolist()`?
-TRANSPOSED_FLAT = None
+TRANSPOSED_FLAT = [0, 3, 1, 4, 2, 5]
 
 # Q1d. What is `a.reshape(3, 2).T.tolist()`? It has the same shape as `a`.
-RESHAPED_THEN_TRANSPOSED = None
+RESHAPED_THEN_TRANSPOSED = [[0, 2, 4], [1, 3, 5]]
 
 
 s = np.arange(24).reshape(2, 3, 4)
@@ -101,7 +101,7 @@ s = np.arange(24).reshape(2, 3, 4)
 #      D  s.reshape(3, 2, 4)
 #
 #      Fill in which letter made which panel.
-STACKS: dict[int, str | None] = {1: None, 2: None, 3: None, 4: None}
+STACKS: dict[int, str | None] = {1: "B", 2: "D", 3: "C", 4: "A"}
 
 # ⭐ CORE
 # Q1f. Now with a picture (`... Q1f`). `img` has shape (H, W, 3) =
@@ -115,7 +115,7 @@ STACKS: dict[int, str | None] = {1: None, 2: None, 3: None, 4: None}
 #      Two of these are bugs you will meet in real code. Learn what they look
 #      like: when a picture from your model looks like one of them, you know
 #      which line to look for.
-PICTURES: dict[int, str | None] = {1: None, 2: None, 3: None, 4: None}
+PICTURES: dict[int, str | None] = {1: "C", 2: "A", 3: "D", 4: "B"}
 
 
 # Rotate the picture a quarter turn clockwise (`... rotate_clockwise`).
@@ -128,7 +128,7 @@ def rotate_clockwise(img: np.ndarray) -> np.ndarray:
     """Rotates an (H, W, 3) picture a quarter turn clockwise, giving (W, H, 3)."""
 
     # Your solution here.
-    pass
+    return img.transpose(1, 0, 2)[:, ::-1, :]
 
 
 # ---------------------------------------------------------------------------
@@ -140,15 +140,15 @@ x = np.zeros((4, 1, 3))
 # ⭐ CORE
 # Q2a. Fill in the shape of each expression, or "error".
 SHAPES: dict[str, object] = {
-    "np.squeeze(x)": None,
-    "np.expand_dims(x, 0)": None,
-    "np.concatenate([x, x], axis=0)": None,
-    "np.stack([x, x], axis=0)": None,
-    "np.concatenate([x, x], axis=-1)": None,
-    "np.stack([x, x], axis=-1)": None,
-    "x.reshape(2, -1)": None,
-    "x.reshape(5, -1)": None,
-    "np.split(np.arange(12), 3)[1]": None,
+    "np.squeeze(x)": (4, 3),
+    "np.expand_dims(x, 0)": (1, 4, 1, 3),
+    "np.concatenate([x, x], axis=0)": (8, 1, 3),
+    "np.stack([x, x], axis=0)": (2, 4, 1, 3),
+    "np.concatenate([x, x], axis=-1)": (4, 1, 6),
+    "np.stack([x, x], axis=-1)": (4, 1, 3, 2),
+    "x.reshape(2, -1)": (2, 6),
+    "x.reshape(5, -1)": "error",
+    "np.split(np.arange(12), 3)[1]": (4,),
 }
 
 
@@ -161,7 +161,7 @@ SHAPES: dict[str, object] = {
 #      B  np.stack([A, B], axis=1).reshape(4, 2)
 #      C  np.concatenate([A, B], axis=1).reshape(4, 2)
 #      D  np.concatenate([A, B], axis=0)
-INTERLEAVES = None
+INTERLEAVES = ["B", "C"]
 
 
 # You get the red, green and blue parts of a picture as three separate
@@ -173,7 +173,7 @@ def merge_channels(r: np.ndarray, g: np.ndarray, b: np.ndarray) -> np.ndarray:
     """Combines three (H, W) channels into one (H, W, 3) picture."""
 
     # Your solution here.
-    pass
+    return np.stack([r, g, b], axis=2)
 
 
 # Cut the picture into a left and a right half and put them back the other
@@ -182,9 +182,9 @@ def merge_channels(r: np.ndarray, g: np.ndarray, b: np.ndarray) -> np.ndarray:
 
 def swap_halves(img: np.ndarray) -> np.ndarray:
     """Swaps the left and right halves of an (H, W, 3) picture."""
-
+    left, right = np.split(img, 2, axis=1)
     # Your solution here.
-    pass
+    return np.concatenate([right, left], axis=1)
 
 
 # ---------------------------------------------------------------------------
@@ -239,7 +239,9 @@ def contact_sheet(batch: np.ndarray, rows: int, cols: int) -> np.ndarray:
 
     _, h, w, _ = batch.shape
     # Your solution here.
-    pass
+    grid = batch.reshape(rows, cols, h, w, 3)
+    grid = grid.transpose(0, 2, 1, 3, 4)
+    return grid.reshape(rows * h, cols * w, 3)
 
 
 # Someone scrambled the (64, 96, 3) robot with this line:
@@ -255,7 +257,9 @@ def unscramble(scrambled: np.ndarray) -> np.ndarray:
     """Turns the (96, 64, 3) scrambled picture back into the (64, 96, 3) robot."""
 
     # Your solution here.
-    pass
+    grid = scrambled.reshape(6, 16, 4, 16, 3)
+    grid = grid.transpose(2, 1, 0, 3, 4)
+    return grid.reshape(64, 96, 3)
 
 
 # ---------------------------------------------------------------------------
@@ -278,7 +282,7 @@ def channels_last(images: np.ndarray) -> np.ndarray:
     """
 
     B, C, H, W = images.shape
-    return images.reshape(B, H, W, C)
+    return images.transpose(0, 2, 3, 1)
 
 
 def split_heads(x: np.ndarray, n_heads: int) -> np.ndarray:
@@ -304,7 +308,7 @@ def merge_heads(x: np.ndarray) -> np.ndarray:
     """
 
     B, H, T, Dh = x.shape
-    return x.reshape(B, T, H * Dh)
+    return x.transpose(0, 2, 1, 3).reshape(B, T, H * Dh)
 
 
 def scores_to_vector(scores: np.ndarray) -> np.ndarray:
@@ -314,7 +318,7 @@ def scores_to_vector(scores: np.ndarray) -> np.ndarray:
     including B = 1.
     """
 
-    return np.squeeze(scores)
+    return np.squeeze(scores, axis=1)
 
 
 FUNCTIONS = {
