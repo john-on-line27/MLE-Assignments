@@ -61,14 +61,14 @@ import numpy as np
 # Q1a. For each line, `a` has the first shape and `b` the second. Give the
 #      shape of the result, or "error".
 MATMUL_SHAPES: dict[str, object] = {
-    "(4, 3) @ (3, 5)": None,
-    "(4, 3) @ (4, 3)": None,
-    "(4, 3) * (4, 3)": None,
-    "(3,) @ (3, 5)": None,
-    "(4, 3) @ (3,)": None,
-    "(3,) @ (3,)": None,
-    "(8, 4, 3) @ (2, 3, 5)": None,
-    "(2, 1, 4, 3) @ (8, 3, 5)": None,
+    "(4, 3) @ (3, 5)": (4, 5),
+    "(4, 3) @ (4, 3)": "error",
+    "(4, 3) * (4, 3)": (4, 3),
+    "(3,) @ (3, 5)": (5,),
+    "(4, 3) @ (3,)": (4,),
+    "(3,) @ (3,)": (),
+    "(8, 4, 3) @ (2, 3, 5)": "error",
+    "(2, 1, 4, 3) @ (8, 3, 5)": (2, 8, 4, 5),
 }
 
 # Q1b. `X` holds n samples as rows, shape (n, d). Which expression gives the
@@ -79,7 +79,7 @@ MATMUL_SHAPES: dict[str, object] = {
 #      B  X.T @ X
 #      C  X * X
 #      D  (X * X).sum(axis=1)
-SAMPLE_DOTS = None
+SAMPLE_DOTS = "A"
 
 
 # ---------------------------------------------------------------------------
@@ -131,9 +131,9 @@ def matmul_by_broadcasting(A: np.ndarray, B: np.ndarray) -> np.ndarray:
         array([[ 4,  5],
                [10, 11]])
     """
-
+    C = A[:, :, None] * B
     # Your solution here.
-    pass
+    return C.sum(axis=1)
 
 
 # ---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ def linear(X: np.ndarray, W: np.ndarray, b: np.ndarray) -> np.ndarray:
         array([[1., 2., 3.]])
     """
 
-    return X @ W + b
+    return X @ W.transpose(1, 0) + b
 
 
 # ⭐ CORE
@@ -175,7 +175,7 @@ def attention_scores(Q: np.ndarray, K: np.ndarray) -> np.ndarray:
     """
 
     D = Q.shape[-1]
-    return Q @ K.T / np.sqrt(D)
+    return Q @ K.swapaxes(-1, -2) / np.sqrt(D)
 
 
 if __name__ == "__main__":

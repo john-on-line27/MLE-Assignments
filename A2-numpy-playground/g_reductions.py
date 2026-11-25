@@ -63,30 +63,30 @@ X = np.zeros((8, 3, 32, 32))
 
 # Q1a. Fill in the shape of each expression.
 SHAPES: dict[str, object] = {
-    "X.sum()": None,
-    "X.mean(axis=0)": None,
-    "X.mean(axis=1)": None,
-    "X.max(axis=-1)": None,
-    "X.reshape(8, -1).argmax(axis=1)": None,
-    "np.cumsum(X, axis=2)": None,
+    "X.sum()": (),
+    "X.mean(axis=0)": (3, 32, 32),
+    "X.mean(axis=1)": (8, 32, 32),
+    "X.max(axis=-1)": (8, 3, 32),
+    "X.reshape(8, -1).argmax(axis=1)": (8,),
+    "np.cumsum(X, axis=2)": (8, 3, 32, 32),
 }
 
 M = np.array([[1, 5, 3], [4, 2, 6]])
 
 # Q1b. What is `M.sum(axis=0)`? Give a list.
-M_SUM_AXIS_0 = None
+M_SUM_AXIS_0 = [5, 7, 9]
 
 # Q1c. What is `M.max(axis=1)`? Give a list.
-M_MAX_AXIS_1 = None
+M_MAX_AXIS_1 = [5, 6]
 
 # Q1d. What is `M.argmax(axis=0)`? Give a list.
-M_ARGMAX_AXIS_0 = None
+M_ARGMAX_AXIS_0 = [1, 0, 1]
 
 # Q1e. What is `M.argmax()`, with no axis? Give an int.
-M_ARGMAX = None
+M_ARGMAX = np.int64(5)
 
 # Q1f. What is `M.cumsum(axis=1).tolist()`?
-M_CUMSUM_AXIS_1 = None
+M_CUMSUM_AXIS_1 = [[1, 6, 9], [4, 6, 12]]
 
 # The next questions combine an elementwise step with a reduction. Work each
 # one out in your head first: write down the array after the elementwise
@@ -94,16 +94,16 @@ M_CUMSUM_AXIS_1 = None
 
 # Q1g. What are `np.max(M, 0).tolist()` and `np.maximum(M, 0).tolist()`?
 #      Give a tuple of two lists.
-MAX_VS_MAXIMUM = None
+MAX_VS_MAXIMUM = ([4, 5, 6], [[1, 5, 3], [4, 2, 6]])
 
 # Q1h. What is `np.maximum(M - 3, 0).sum()`? Give an int.
-M_SHIFTED_RELU_SUM = None
+M_SHIFTED_RELU_SUM = np.int64(6)
 
 # Q1i. What is `np.clip(M, 2, 5).sum(axis=1).tolist()`?
-M_CLIPPED_ROW_SUMS = None
+M_CLIPPED_ROW_SUMS = [10, 11]
 
 # Q1j. What is `(M % 2 == 1).sum(axis=1).tolist()`?
-M_ODD_COUNTS = None
+M_ODD_COUNTS = [3, 0]
 
 
 # ---------------------------------------------------------------------------
@@ -121,16 +121,16 @@ M_ODD_COUNTS = None
 
 # ⭐ CORE
 # Q2a. Which `axis` tuple gives the batch norm means, `X.mean(axis=...)`?
-BATCH_NORM_AXES = None
+BATCH_NORM_AXES = (0, 2, 3)
 
 # ⭐ CORE
 # Q2b. Which `axis` tuple gives the layer norm means?
-LAYER_NORM_AXES = None
+LAYER_NORM_AXES = (1, 2, 3)
 
 # Q2c. To subtract the batch norm means from X, you need them with
 #      `keepdims=True`. What is their shape then, for X of shape
 #      (N, C, H, W) = (8, 3, 32, 32)?
-BATCH_NORM_KEEPDIMS_SHAPE = None
+BATCH_NORM_KEEPDIMS_SHAPE = (1, 3, 1, 1)
 
 
 # ---------------------------------------------------------------------------
@@ -160,7 +160,7 @@ def softmax(logits: np.ndarray) -> np.ndarray:
                [0.25, 0.75]])
     """
 
-    shifted = logits - logits.max()
+    shifted = logits - logits.max(axis=1, keepdims=True)
     e = np.exp(shifted)
     return e / e.sum(axis=1, keepdims=True)
 
@@ -177,7 +177,7 @@ def accuracy(logits: np.ndarray, labels: np.ndarray) -> float:
         0.5
     """
 
-    predictions = logits.argmax(axis=0)
+    predictions = logits.argmax(axis=1)
     return float((predictions == labels).mean())
 
 

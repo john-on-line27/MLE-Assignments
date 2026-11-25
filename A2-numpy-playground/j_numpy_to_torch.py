@@ -71,35 +71,35 @@ x3 = torch.zeros(2, 3, 4)
 
 # Q1a. Fill in the shape of each expression, or "error".
 SHAPES: dict[str, object] = {
-    "t.sum(dim=0)": None,
-    "t.unsqueeze(0)": None,
-    "t.permute(1, 0)": None,
-    "torch.cat([t, t], dim=1)": None,
-    "t.max(dim=1).values": None,
-    "t.max()": None,
-    "t[:, ::-1]": None,
-    "t.flip(1)": None,
-    "x3.transpose(1, 2)": None,
-    "x3.transpose(0, 2, 1)": None,
+    "t.sum(dim=0)": (4,),
+    "t.unsqueeze(0)": (1, 3, 4),
+    "t.permute(1, 0)": (4, 3),
+    "torch.cat([t, t], dim=1)": (3, 8),
+    "t.max(dim=1).values": (3,),
+    "t.max()": (),
+    "t[:, ::-1]": "error",
+    "t.flip(1)": (3, 4),
+    "x3.transpose(1, 2)": (2, 4, 3),
+    "x3.transpose(0, 2, 1)": "error",
 }
 
 # Q1b. Fill in the dtype of each expression as a string (e.g. "float32").
 DTYPES: dict[str, object] = {
-    "np.array([1.0, 2.0])": None,
-    "torch.tensor([1.0, 2.0])": None,
-    "torch.tensor([1, 2])": None,
-    "torch.from_numpy(np.array([1.0, 2.0]))": None,
-    "np.exp(np.arange(3))": None,
-    "torch.exp(torch.arange(3))": None,
+    "np.array([1.0, 2.0])": "float64",
+    "torch.tensor([1.0, 2.0])": "float32",
+    "torch.tensor([1, 2])": "int64",
+    "torch.from_numpy(np.array([1.0, 2.0]))": "float64",
+    "np.exp(np.arange(3))": "float64",
+    "torch.exp(torch.arange(3))": "float32",
 }
 
 a32 = np.zeros((3, 4), dtype=np.float32)
 
 # Q1c. What is `a32.strides`?
-NUMPY_STRIDES = None
+NUMPY_STRIDES = (16, 4)
 
 # Q1d. What is `torch.from_numpy(a32).stride()`?
-TORCH_STRIDES = None
+TORCH_STRIDES = (4, 1)
 
 
 # ---------------------------------------------------------------------------
@@ -129,10 +129,10 @@ def sharing_demo() -> dict[str, float]:
 # Q2. Without running it first, fill in the values `sharing_demo` returns.
 #     Then run it to check.
 SHARING: dict[str, object] = {
-    "a[0]": None,
-    "shared[0]": None,
-    "copied[0]": None,
-    "back[0]": None,
+    "a[0]": 11.0,
+    "shared[0]": 11.0,
+    "copied[0]": 2.0,
+    "back[0]": 11.0,
 }
 
 
@@ -145,16 +145,16 @@ t = torch.arange(12.0).reshape(3, 4)
 # ⭐ CORE
 # Q3a. For each expression, give the resulting shape, or "error".
 VIEWS: dict[str, object] = {
-    "t.view(12)": None,
-    "t.T.view(12)": None,
-    "t.T.reshape(12)": None,
-    "t.T.contiguous().view(12)": None,
-    "t[:, :2].view(6)": None,
-    "t[:2].view(8)": None,
+    "t.view(12)": (12,),
+    "t.T.view(12)": "error",
+    "t.T.reshape(12)": (12,),
+    "t.T.contiguous().view(12)": (12,),
+    "t[:, :2].view(6)": "error",
+    "t[:2].view(8)": (8,),
 }
 
 # Q3b. Does `t.T.reshape(12)` share memory with `t`? True or False.
-RESHAPE_OF_T_SHARES_MEMORY = None
+RESHAPE_OF_T_SHARES_MEMORY = False
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ def relu(x: torch.Tensor) -> torch.Tensor:
         return np.maximum(x, 0)
     """
 
-    return torch.maximum(x, 0)
+    return torch.maximum(x, torch.zeros_like(x))
 
 
 def softmax(logits: torch.Tensor) -> torch.Tensor:
@@ -188,7 +188,7 @@ def softmax(logits: torch.Tensor) -> torch.Tensor:
         return e / e.sum(axis=1, keepdims=True)
     """
 
-    shifted = logits - logits.max(dim=1, keepdim=True)
+    shifted = logits - logits.max(dim=1, keepdim=True).values
     e = torch.exp(shifted)
     return e / e.sum(dim=1, keepdim=True)
 
@@ -201,7 +201,7 @@ def reverse_time(x: torch.Tensor) -> torch.Tensor:
         return x[:, ::-1]
     """
 
-    return x[:, ::-1]
+    return x.flip(1)
 
 
 def flatten_channels_last(images: torch.Tensor) -> torch.Tensor:
@@ -217,7 +217,7 @@ def flatten_channels_last(images: torch.Tensor) -> torch.Tensor:
     """
 
     B = images.shape[0]
-    return images.permute(0, 2, 3, 1).view(B, -1)
+    return images.permute(0, 2, 3, 1).reshape(B, -1)
 
 
 # ⭐ CORE
@@ -231,7 +231,7 @@ def linear_from_numpy(X: np.ndarray, W: torch.Tensor, b: torch.Tensor) -> torch.
         return X @ W + b
     """
 
-    X_t = torch.from_numpy(X)
+    X_t = torch.as_tensor(X, dtype=W.dtype, device=W.device)
     return X_t @ W + b
 
 
@@ -246,7 +246,7 @@ def center_columns(x: np.ndarray) -> torch.Tensor:
         return x
     """
 
-    t = torch.from_numpy(x)
+    t = torch.from_numpy(x).clone()
     t -= t.mean(dim=0)
     return t
 

@@ -45,7 +45,7 @@ def shuffle(X: np.ndarray, y: np.ndarray, rng: np.random.Generator) -> tuple[np.
     """
 
     perm = rng.permutation(len(X))
-    return X[perm], y[rng.permutation(len(y))]
+    return X[perm], y[perm]
 
 
 # ⭐ CORE
@@ -61,7 +61,7 @@ def standardize(X_train: np.ndarray, X_test: np.ndarray) -> tuple[np.ndarray, np
     """
 
     mean = X_train.mean(axis=0)
-    std = X_train.std()
+    std = X_train.std(axis=0)
     train = (X_train - mean) / std
     test = (X_test - mean) / std
     return train, test
@@ -75,7 +75,7 @@ def hidden_layer(X: np.ndarray, W: np.ndarray, b: np.ndarray) -> np.ndarray:
     (d_in, d_out) and `b` has shape (d_out,). Returns shape (n, d_out).
     """
 
-    return np.max(X @ W + b, 0)
+    return np.maximum(X @ W + b, 0)
 
 
 # ---------------------------------------------------------------------------
